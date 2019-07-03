@@ -1,15 +1,15 @@
 spring:
-			  application:
-			    name: config-server
-			#git配置
-			  cloud:
-			    config:
-			      server:
-			        git:
-			          uri: https://gitee.com/waitforxy/config_cloud
-			          username: 794666918@qq.com
-			          password: xdclass.net123
-			          #超时时间
-			          timeout: 5
-          			  #分支
-          			  default-label: master
+  application:
+    name: config-server
+    #git配置
+    cloud:
+      config:
+        server:
+	  git:
+	    uri: https://gitee.com/waitforxy/config_cloud
+	    username: 794666918@qq.com
+	    password: xdclass.net123
+	    #超时时间
+	    timeout: 5
+            #分支
+            default-label: master
