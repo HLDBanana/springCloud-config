@@ -4,5 +4,5 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8771
+  port: 8770
   connection-timeout: 5000ms
