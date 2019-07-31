@@ -1,0 +1,35 @@
+# 端口
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 9000
+  connection-timeout: 5000ms
+
+# 服务名称
+spring:
+  zipkin:
+    # 配置ziplin链路追踪地址
+    base-url: http://10.4.237.123:9411/
+  sleuth:
+    sampler:
+      probability: 1   #采样百分比设置为1表示100%，生产环境可以设置为0.1
+
+
+
+
+# 网关配置访问服务名  访问oameeting的时候自动访问order服务  可以配置工具项目访问方式
+zuul:
+  routes:
+    #order: /oameeting/**
+    #配置gatway拦截， 访问地址带oameeting的会自动调用注册名称为oa的接口
+    oa: /oameeting/**
+  ignored-services: oa   # 取消跳过网关直接调用服务接口方式。取消整个oa访问方式 /*-service/**
+  host:
+    connect-timeout-millis: 8000    #zuul默认超时时长 默认2s
+    socket-timeout-millis: 10000     # socket链接超时 默认10s
+
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
