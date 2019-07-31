@@ -1,0 +1,109 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8001
+  connection-timeout: 5000ms
+  
+
+spring:
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /static/**
+  resources:
+    add-mappings: false
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.18.202:3306/hanergy_system?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root123
+  redis:
+    sentinel:
+      nodes: 192.168.18.202:26380
+      master: master1
+  zipkin:
+    #配置zipkin链路追踪地址 ${spring.cloud.client.ip-address}：服务地址
+    base-url: http://${spring.cloud.client.ip-address}:9411/
+    locator:
+      discovery:
+        enabled: true
+  sleuth:
+    sampler:
+      probability: 0.1   #采样百分比设置为1表示100%，生产环境可以设置为0.1
+      
+
+system:
+   standard: http://198.168.18.204/standard/api/v1/dicationary/doRefreshRedis?refresh={0}
+      
+#修改调用超时时间
+feign:
+  client:
+    config:
+      default:
+        # 服务调用超时时间配置
+        connectTimeout: 4000
+        readTimeout: 4000
+  hystrix:
+    #这里不配置hystrix fallback方法不会执行
+    enabled: true
+
+#hystrix超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            # hystrix超时时间
+            timeoutInMilliseconds: 4000
+
+#仪表盘配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath:mybatis/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.hanergy.out.entity
+  global-config:
+    #自定义SQL注入器
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+      id-type: input
+      #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+      field-strategy: NOT_NULL
+      #逻辑删除配置
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+    #刷新mapper 调试神器
+    refresh: true
+  #    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    #sql打印配置
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    org.springframework.boot.autoconfigure: ERROR
+    com.hanergy.activiti.data: debug
+    ## 去掉CONDITIONS EVALUATION REPORT日志打印
+    io.swagger.models.parameters.AbstractSerializableParameter: error
